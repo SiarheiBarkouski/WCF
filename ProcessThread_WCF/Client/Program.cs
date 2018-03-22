@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.ServiceModel;
-using System.ServiceModel.Description;
 using Infrastructure;
 
 namespace Client
@@ -43,19 +42,23 @@ namespace Client
                                 procClass.GetAllProcesses();
                                 break;
                             case 2:
+                                Console.Write("Enter process id: ");
                                 procClass.GetProcessById(Convert.ToInt32(Console.ReadLine()));
                                 break;
                             case 3:
-                                procClass.GetProcessThreads(procClass.GetProcessById(Convert.ToInt32(Console.ReadLine())));
+                                Console.Write("Enter process id: ");
+                                procClass.GetProcessThreads(Convert.ToInt32(Console.ReadLine()));
                                 break;
                             case 4:
                                 procClass.StartProcess(Console.ReadLine());
                                 break;
                             case 5:
-                                procClass.KillProcess(procClass.GetProcessById(Convert.ToInt32(Console.ReadLine())));
+                                Console.Write("Enter process id: ");
+                                procClass.KillProcess(Convert.ToInt32(Console.ReadLine()));
                                 break;
                             case 6:
-                                procClass.ShowModulesInfo(procClass.GetProcessById(Convert.ToInt32(Console.ReadLine())));
+                                Console.Write("Enter process id: ");
+                                procClass.ShowModulesInfo(Convert.ToInt32(Console.ReadLine()));
                                 break;
                             case 0:
                                 Process.GetCurrentProcess().Kill();

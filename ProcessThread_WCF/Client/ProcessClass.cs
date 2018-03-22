@@ -19,57 +19,39 @@ namespace Client
         }
         public void GetAllProcesses()
         {
-            var processes = _info.GetAllProcesses();
-            Console.Clear();
-            foreach (var proc in processes)
-            {
-                Console.WriteLine($"{proc.Id} {proc.ProcessName} {proc.StartTime}");
-            }
-            Console.ReadKey();
-            Console.Clear();
+            ConsoleAction(_info.GetAllProcesses());
         }
 
-        public void GetProcessThreads(Process proc)
+        public void GetProcessThreads(int processId)
         {
-            var threads = _info.GetProcessThreads(proc);
-
-            Console.Clear();
-            foreach (System.Diagnostics.ProcessThread thread in threads)
-            {
-                Console.WriteLine($"{thread.Id} {thread.PriorityLevel} {thread.StartTime}");
-            }
-
-            Console.ReadKey();
-            Console.Clear();
+            ConsoleAction(_info.GetProcessThreads(processId));
         }
 
-        public Process GetProcessById(int processId)
+        public void GetProcessById(int processId)
         {
-            var proc = _info.GetProcessById(processId);
-            Console.WriteLine($"{proc.Id} {proc.ProcessName} {proc.StartTime}");
-            return proc;
+            ConsoleAction(_info.GetProcessById(processId));
         }
         public void StartProcess(string path)
         {
-            var proc = _info.StartProcess(path);
-            Console.WriteLine($"Process {proc.ProcessName} was started.");
+            ConsoleAction(_info.StartProcess(path));
         }
-        public void KillProcess(Process proc)
+        public void KillProcess(int processId)
         {
-            _info.KillProcess(proc);
-            Console.WriteLine($"Process {proc.ProcessName} was killed.");
+            ConsoleAction(_info.KillProcess(processId));
         }
 
-        public void ShowModulesInfo(Process proc)
+        public void ShowModulesInfo(int processId)
         {
-            var modules = _info.ShowModulesInfo(proc);
+            ConsoleAction(_info.ShowModulesInfo(processId));
+        }
+
+        private void ConsoleAction(string input)
+        {
             Console.Clear();
-            foreach (ProcessModule module in modules)
-            {
-                Console.WriteLine($"{module.ModuleName} {module.FileVersionInfo}");
-            }
+            Console.WriteLine(input);
             Console.ReadKey();
             Console.Clear();
         }
+
     }
 }

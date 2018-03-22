@@ -6,22 +6,22 @@ namespace Infrastructure
     [ServiceContract]
     public interface IProcessInformation
     {
-        [OperationContract(IsOneWay = false)]
-        Process[] GetAllProcesses();
+        [OperationContract]
+        string GetAllProcesses();
 
         [OperationContract]
-        ProcessThreadCollection GetProcessThreads(Process proc);
+        string GetProcessThreads(int processId);
 
         [OperationContract]
-        Process GetProcessById(int processId);
+        string GetProcessById(int processId);
 
         [OperationContract]
-        Process StartProcess(string path);
+        string StartProcess(string path);
 
         [OperationContract]
-        void KillProcess(Process proc);
+        string KillProcess(int processId);
 
         [OperationContract]
-        ProcessModuleCollection ShowModulesInfo(Process proc);
+        string ShowModulesInfo(int processId);
     }
 }

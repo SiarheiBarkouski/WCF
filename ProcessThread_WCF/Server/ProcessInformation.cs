@@ -1,62 +1,82 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Text;
 using Infrastructure;
 
 namespace Server
 {
     class ProcessInformation : IProcessInformation
     {
-        public Process[] GetAllProcesses()
+        public string GetAllProcesses()
         {
+            var str = new StringBuilder();
             var processes = Process.GetProcesses();
-            return processes;
+            foreach (var proc in processes)
+            {
+                try
+                {
+                    str.AppendLine($"{proc.ProcessName} {proc.Id} {proc.StartTime}");
+                }
+                catch
+                {
+                }
+            }
+            return str.ToString();
         }
 
-        public ProcessThreadCollection GetProcessThreads(Process proc)
+        public string GetProcessThreads(int processId)
         {
+            var str = new StringBuilder();
+            var proc = Process.GetProcessById(processId);
             var threads = proc.Threads;
-
-            Console.Clear();
             foreach (ProcessThread thread in threads)
             {
-                Console.WriteLine($"{thread.Id} {thread.PriorityLevel} {thread.StartTime}");
+                str.AppendLine($"{thread.Id} {thread.PriorityLevel} {thread.StartTime}");
             }
-
-            Console.ReadKey();
-            Console.Clear();
-
-            return threads;
+            return str.ToString();
         }
-        
-        public Process GetProcessById(int processId)
+
+        public string GetProcessById(int processId)
         {
+            var str = new StringBuilder();
             var proc = Process.GetProcessById(processId);
-            Console.WriteLine($"{proc.Id} {proc.ProcessName} {proc.StartTime}");
-            return proc;
+            str.AppendLine($"{proc.Id} {proc.ProcessName} {proc.StartTime}");
+            return str.ToString();
         }
-        public Process StartProcess(string path)
+        public string StartProcess(string path)
         {
+            var str = new StringBuilder();
             var proc = Process.Start(path);
-            return proc;
+            str.AppendLine($"Process {proc?.ProcessName} was started.");
+            return str.ToString();
         }
-        public void KillProcess(Process proc)
+        public string KillProcess(int processId)
         {
+            var str = new StringBuilder();
+            var proc = Process.GetProcessById(processId);
             proc.Kill();
-            Console.WriteLine($"Process {proc.ProcessName} was killed.");
+            str.AppendLine($"Process {proc.ProcessName} was killed.");
+            return str.ToString();
         }
-        
-        public ProcessModuleCollection ShowModulesInfo(Process proc)
-        {
-            var modules = proc.Modules;
-            Console.Clear();
-            foreach (ProcessModule module in modules)
-            {
-                Console.WriteLine($"{module.ModuleName} {module.FileVersionInfo}");
-            }
-            Console.ReadKey();
-            Console.Clear();
 
-            return modules;
+        public string ShowModulesInfo(int processId)
+        {
+            var str = new StringBuilder();
+            try
+            {
+                var proc = Process.GetProcessById(processId);
+                var modules = proc.Modules;
+                foreach (ProcessModule module in modules)
+                {
+                    str.AppendLine($"{module.ModuleName} {module.FileVersionInfo}");
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return $"Failed to get modules: {e.Message}";
+            }
+            return str.ToString();
         }
     }
 }
